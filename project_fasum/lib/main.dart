@@ -1,8 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:project_fasum/firebase_options.dart';
-import 'package:project_fasum/screens/sign_up_screen.dart';
-
+import 'package:flutter_application_1/firebase_options.dart';
+import 'package:flutter_application_1/screens/sign_up_screen.dart';
 
 Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
