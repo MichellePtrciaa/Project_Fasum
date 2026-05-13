@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Added import for DateFormat
-import 'package:flutter_application_1/screens/add_post_screen.dart'; // Note: Consider updating package name to match project (e.g., 'package:project_fasum/screens/add_post_screen.dart')
-import 'package:flutter_application_1/screens/sign_in_screen.dart'; // Note: Consider updating package name to match project (e.g., 'package:project_fasum/screens/sign_in_screen.dart')
+import 'package:flutter_application_1/screens/add_post_screen.dart';
+import 'package:flutter_application_1/screens/sign_in_screen.dart';
+import 'package:flutter_application_1/screens/detail_screen.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
-  // Changed to StatefulWidget
   const HomeScreen({super.key});
 
   @override
@@ -19,9 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const SignInScreen()),
-    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (context) => SignInScreen()));
   }
 
   String formatTime(DateTime dateTime) {
@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
@@ -82,7 +83,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   'fasum-image-${createdAt.millisecondsSinceEpoch}';
 
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => DetailScreen(
+                        imageBase64: imageBase64,
+                        description: description,
+                        createdAt: createdAt,
+                        fullName: fullName,
+                        latitude: latitude,
+                        longitude: longitude,
+                        category: category,
+                        heroTag: heroTag,
+                      ),
+                    ),
+                  );
+                },
                 child: Card(
                   elevation: 1,
                   color: Theme.of(context).colorScheme.surfaceContainerLow,
