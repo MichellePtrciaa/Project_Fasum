@@ -17,6 +17,7 @@ class DetailScreen extends StatefulWidget {
     required this.category,
     required this.heroTag,
   });
+
   final String imageBase64;
   final String description;
   final DateTime createdAt;
@@ -51,19 +52,32 @@ class _DetailScreenState extends State<DetailScreen> {
     ).format(widget.createdAt);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Detail Post')),
+      appBar: AppBar(title: const Text('Detail Laporan')),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
-              Hero(
-                tag: widget.heroTag,
-                child: Image.memory(
-                  base64Decode(widget.imageBase64),
-                  fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: SizedBox(
                   width: double.infinity,
                   height: 250,
+                  child: Center(
+                    child: Hero(
+                      tag: widget.heroTag,
+                      child: InteractiveViewer(
+                        minScale: 1.0,
+                        maxScale: 4.0,
+                        child: Image.memory(
+                          base64Decode(widget.imageBase64),
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                          height: 250,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
               Positioned(
@@ -75,7 +89,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => FullscrenImageScreen(
+                        builder: (_) => FullScreenImageScreen(
                           imageBase64: widget.imageBase64,
                         ),
                       ),
@@ -87,132 +101,67 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ],
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Kiri: Kategori & Waktu
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              // Kategori
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.category,
-                                    size: 18,
-                                    color: Color.fromARGB(255, 223, 0, 0),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'Kategori',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
+                              const Icon(
+                                Icons.category,
+                                size: 20,
+                                color: Colors.red,
                               ),
-                              const SizedBox(height: 4),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 26),
-                                child: Text(
-                                  widget.category,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              // Waktu Laporan
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.access_time,
-                                    size: 18,
-                                    color: Color.fromARGB(255, 223, 0, 0),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'Waktu Laporan',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 26),
-                                child: Text(
-                                  createdAtFormatted,
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              // Pelapor
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.person,
-                                    size: 18,
-                                    color: Color.fromARGB(255, 223, 0, 0),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'Pelapor',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 26),
-                                child: Text(
-                                  widget.fullName,
-                                  style: const TextStyle(fontSize: 14),
+                              const SizedBox(width: 4),
+                              Text(
+                                widget.category,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        // Kanan: Icon map
-                        IconButton(
-                          onPressed: openMap,
-                          icon: const Icon(
-                            Icons.map,
-                            size: 38,
-                            color: Colors.lightGreen,
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.access_time,
+                                size: 20,
+                                color: Colors.blue,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                createdAtFormatted,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ],
                           ),
-                          tooltip: "Buka di Google Maps",
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Deskripsi',
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      widget.description,
-                      style: const TextStyle(fontSize: 16),
+                    IconButton(
+                      onPressed: openMap,
+                      icon: const Icon(
+                        Icons.map,
+                        size: 38,
+                        color: Colors.lightGreen,
+                      ),
+                      tooltip: "Buka di Google Maps",
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 20),
+                Text(widget.description, style: const TextStyle(fontSize: 16)),
+              ],
             ),
           ),
         ],
